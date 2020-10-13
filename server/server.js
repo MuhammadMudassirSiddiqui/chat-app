@@ -17,6 +17,17 @@ app.use('/', express.static(test))
 io.on('connection', (socket) => {
     console.log('new user connected');
 
+    socket.emit('message1', {
+        name: 'Admin',
+        text: 'Welcome to chat app',
+        createdAt: new Date().toDateString()
+    })
+
+    socket.broadcast.emit('message1', {
+        name: 'Admin',
+        text: 'hi New User!',
+        createdAt: new Date().toDateString()
+    })
 
     socket.on('message2', (event) => {
         console.log(event);
@@ -25,6 +36,12 @@ io.on('connection', (socket) => {
             text: event.text,
             createdAt: new Date().getTime()
         })
+
+        // socket.broadcast.emit('message1', {
+        //     name: event.name,
+        //     text: event.text,
+        //     createAt: new Date().toDateString()
+        // })
     })
 
     socket.on('disconnect', () => {
