@@ -16,6 +16,19 @@ app.use('/', express.static(test))
 
 io.on('connection', (socket) => {
     console.log('new user connected');
+
+    socket.emit('message1', {
+        name: 'aqsa',
+        text: "hello",
+        createdAt: new Date().getTime()
+    })
+    socket.on('message2', (event) => {
+        console.log(event);
+    })
+
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    })
 })
 
 // app.get('/', (req, res) => {
