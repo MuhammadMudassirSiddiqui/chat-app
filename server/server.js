@@ -17,13 +17,14 @@ app.use('/', express.static(test))
 io.on('connection', (socket) => {
     console.log('new user connected');
 
-    socket.emit('message1', {
-        name: 'aqsa',
-        text: "hello",
-        createdAt: new Date().getTime()
-    })
+
     socket.on('message2', (event) => {
         console.log(event);
+        io.emit('message1', {
+            name: event.name,
+            text: event.text,
+            createdAt: new Date().getTime()
+        })
     })
 
     socket.on('disconnect', () => {
