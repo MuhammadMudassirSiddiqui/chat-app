@@ -5,7 +5,7 @@ var http = require('http')
 var express = require('express')
 const socketIO = require('socket.io')
 const { Socket } = require('dgram')
-var { genMessage } = require('./utils/message')
+var { genMessage, genLocationMessage } = require('./utils/message')
 
 
 var app = express()
@@ -26,12 +26,9 @@ io.on('connection', (socket) => {
         console.log(event);
         io.emit('message1', genMessage(event.name, event.text));
         // callback('this message is from server')
-
-        // socket.broadcast.emit('message1', {
-        //     name: event.name,
-        //     text: event.text,
-        //     createAt: new Date().toDateString()
-        // })
+    })
+    socket.on('createLocationMessage', (event) => {
+        io.emit('newLocationMessage', genLocationMessage('Admin', event.latitude, event.longitude))
     })
 
     socket.on('disconnect', () => {
