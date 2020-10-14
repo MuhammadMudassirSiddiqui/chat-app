@@ -5,6 +5,7 @@ var http = require('http')
 var express = require('express')
 const socketIO = require('socket.io')
 const { Socket } = require('dgram')
+var { genMessage } = require('./utils/message')
 
 
 var app = express()
@@ -17,25 +18,13 @@ app.use('/', express.static(test))
 io.on('connection', (socket) => {
     console.log('new user connected');
 
-    socket.emit('message1', {
-        name: 'Admin',
-        text: 'Welcome to chat app',
-        createdAt: new Date().toDateString()
-    })
+    socket.emit('message1', genMessage('Admin', 'Welcome to chat app'))
 
-    socket.broadcast.emit('message1', {
-        name: 'Admin',
-        text: 'hi New User!',
-        createdAt: new Date().toDateString()
-    })
+    socket.broadcast.emit('message1', genMessage('Admin', 'new User login'))
 
     socket.on('message2', (event) => {
         console.log(event);
-        io.emit('message1', {
-            name: event.name,
-            text: event.text,
-            createdAt: new Date().getTime()
-        })
+        io.emit('message1', genMessage(event.name, event.text))
 
         // socket.broadcast.emit('message1', {
         //     name: event.name,
