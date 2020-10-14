@@ -22,9 +22,10 @@ io.on('connection', (socket) => {
 
     socket.broadcast.emit('message1', genMessage('Admin', 'new User login'))
 
-    socket.on('message2', (event) => {
+    socket.on('message2', (event, callback) => {
         console.log(event);
-        io.emit('message1', genMessage(event.name, event.text))
+        io.emit('message1', genMessage(event.name, event.text));
+        // callback('this message is from server')
 
         // socket.broadcast.emit('message1', {
         //     name: event.name,
