@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
     socket.on('message2', (event, callback) => {
         console.log(event);
         io.emit('message1', genMessage(event.name, event.text));
-        // callback('this message is from server')
+        callback()
     })
     socket.on('createLocationMessage', (event) => {
         io.emit('newLocationMessage', genLocationMessage('Admin', event.latitude, event.longitude))
