@@ -23,12 +23,12 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message1', genMessage('Admin', 'new User login'))
 
     socket.on('message2', (event, callback) => {
-        console.log(event);
+        // console.log(event);
         io.emit('message1', genMessage(event.name, event.text));
         callback()
     })
     socket.on('createLocationMessage', (event) => {
-        io.emit('newLocationMessage', genLocationMessage('Admin', event.latitude, event.longitude))
+        io.emit('newLocationMessage', genLocationMessage('User', event.latitude, event.longitude))
     })
 
     socket.on('disconnect', () => {

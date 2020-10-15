@@ -10,18 +10,21 @@ socket.on('disconnect', function() {
 })
 
 socket.on('message1', function(event) {
-    console.log(event);
+    // console.log(event);
+    var formattedTime = moment(event.createAt).format(' h:mm a')
     li = jQuery('<li></li>')
-    li.text(`${event.name} : ${event.text}`)
+    li.text(`${event.name} ${formattedTime} : ${event.text}`)
 
     jQuery('#messages').append(li)
 
 })
 
 socket.on('newLocationMessage', function(event) {
+
+    var formattedTime = moment(event.createdAt).format('h:mm a')
     var li = jQuery('<li></li>')
     var a = jQuery('<a target = "_blank">My Current location</a>')
-    li.text(`${event.name}`)
+    li.text(`${event.name} ${formattedTime} :`)
     a.attr('href', event.url)
 
     li.append(a)
