@@ -12,15 +12,32 @@ var app = express()
 var port = process.env.PORT || 3000
 var server = http.createServer(app)
 var io = socketIO(server)
+var { isRealString } = require('./utils/validation')
 
 app.use('/', express.static(test))
 
 io.on('connection', (socket) => {
     console.log('new user connected');
 
-    socket.emit('message1', genMessage('Admin', 'Welcome to chat app'))
+    // socket.emit('message1', genMessage('Admin', 'Welcome to chat app'))
 
-    socket.broadcast.emit('message1', genMessage('Admin', 'new User login'))
+    // socket.broadcast.emit('message1', genMessage('Admin', 'new User login'))
+
+    socket.on('join', (params, callback) => {
+        if (!isRealString(params.name) || !isRealString(params.room)) {
+            callback('name and room name is required')
+        }
+        socket.join(params.room)
+            // socket.broadcast --> socket.broadcast.to('<any specific name here room name>').emit(..)
+            // io.emit --> io.to('<any specific name here room name>').emit(...)
+            //socket.emit-->(it remains same bcz it communicate to single user)
+
+        socket.emit('message1', genMessage('Admin', `${params.name} Welcome To Chat-App`))
+        socket.broadcast.to(params.room).emit('message1', genMessage('Admin', `${params.name} has join`))
+
+
+        callback()
+    })
 
     socket.on('message2', (event, callback) => {
         // console.log(event);
