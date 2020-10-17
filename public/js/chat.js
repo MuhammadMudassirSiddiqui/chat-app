@@ -1,23 +1,25 @@
+// const { updateLocale } = require("moment");
+
 var socket = io();
 
-function scrollToBottom() {
-    // selectors
-    var messages = jQuery('#messages')
-    var newMessages = jQuery('#messages').children('li:last-child')
+// function scrollToBottom() {
+//     // selectors
+//     var messages = jQuery('#messages')
+//     var newMessages = jQuery('#messages').children('li:last-child')
 
-    // heights
-    var clientHeight = messages.prop('clientHeight')
-    var scrollTop = messages.prop('scrollTop')
-    var scrollHeight = messages.prop('scrollHeight')
-    var newMessageHeight = newMessages.innerHeight()
-    var lastMessageHeight = newMessages.prev().innerHeight()
+//     // heights
+//     var clientHeight = messages.prop('clientHeight')
+//     var scrollTop = messages.prop('scrollTop')
+//     var scrollHeight = messages.prop('scrollHeight')
+//     var newMessageHeight = newMessages.innerHeight()
+//     var lastMessageHeight = newMessages.prev().innerHeight()
 
-    if (clientHeight + scrollTop >= scrollHeight) {
-        messages.scrollTop(scrollHeight)
-            // console.log('kis masla h');
-    }
+//     if (clientHeight + scrollTop >= scrollHeight) {
+//         messages.scrollTop(scrollHeight)
+//             // console.log('kis masla h');
+//     }
 
-}
+// }
 
 socket.on('connect', function() {
     // console.log('connected to server');
@@ -40,6 +42,18 @@ socket.on('disconnect', function() {
     console.log('server is dis connected');
 })
 
+socket.on('updateUserList', function(users) {
+    var ol = jQuery('<ol></ol>')
+    users.forEach(function(user) {
+        ol.append(jQuery('<li></li>').text(user))
+    })
+
+    jQuery('#users').html(ol)
+
+})
+
+
+
 socket.on('message1', function(event) {
     var formattedTime = moment(event.createAt).format(' h:mm a')
 
@@ -51,7 +65,6 @@ socket.on('message1', function(event) {
     })
 
     jQuery('#messages').append(html)
-    scrollToBottom()
 
     // // console.log(event);
     // li = jQuery('<li></li>')
@@ -72,7 +85,6 @@ socket.on('newLocationMessage', function(event) {
     })
 
     jQuery('#messages').append(html)
-    scrollToBottom()
         // var formattedTime = moment(event.createdAt).format('h:mm a')
         // var li = jQuery('<li></li>')
         // var a = jQuery('<a target = "_blank">My Current location</a>')
@@ -96,7 +108,7 @@ jQuery('#message-form').on('submit', function(e) {
     var messageTextBox = jQuery('[name=message]')
 
     socket.emit('message2', {
-            name: "User",
+            // name: "User",
             text: messageTextBox.val()
         },
         function() {
