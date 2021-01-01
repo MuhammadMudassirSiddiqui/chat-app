@@ -23,7 +23,6 @@
 
 // console.log(body.getUserDiscription());
 
-
 class Users {
     constructor() {
         this.users = []
@@ -43,7 +42,6 @@ class Users {
     }
     getUser(id) {
         return this.users.filter((user) => user.id === id)[0]
-
 
     }
     getUserList(room) {
